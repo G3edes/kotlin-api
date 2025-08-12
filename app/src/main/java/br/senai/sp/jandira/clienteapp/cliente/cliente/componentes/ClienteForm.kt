@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.clienteapp.cliente.cliente.componentes
 
 import android.content.res.Configuration
+import android.util.Patterns
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,6 +39,7 @@ import br.senai.sp.jandira.clienteapp.ui.theme.ClienteAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 import retrofit2.await
 
 
@@ -47,6 +49,15 @@ fun ClienteForm(padding: PaddingValues, controleNavegacao: NavHostController?) {
     var nomeCliente by remember { mutableStateOf("") }
     var emailCliente by remember { mutableStateOf("") }
     val clienteAPI = RetrofitFactory().getClienteService()
+    var isNomeError by remember { mutableStateOf(false) }
+    var isEmailError by remember { mutableStateOf(false) }
+
+    fun validar(): Boolean{
+        isNomeError=nomeCliente.length<3
+        isEmailError= !Patterns.EMAIL_ADDRESS.matcher(emailCliente).matches()
+        return !isNomeError && !isEmailError
+
+    }
 
     Surface(
         modifier = Modifier.padding(padding).fillMaxSize()
@@ -103,15 +114,19 @@ fun ClienteForm(padding: PaddingValues, controleNavegacao: NavHostController?) {
         )
         Button(
             onClick = {
-                val cliente = Cliente(
-                    id = null,
-                    nome = nomeCliente,
-                    email = emailCliente
-                )
-                GlobalScope.launch ( Dispatchers.IO ){
-                    val clienteNovo = clienteAPI.gravar(cliente).await()
-                    println("***************$clienteNovo")
-                    controleNavegacao?.navigate("conteudo")
+                if (validar()) {
+                    val cliente = Cliente(
+                        id = null,
+                        nome = nomeCliente,
+                        email = emailCliente
+                    )
+                    GlobalScope.launch(Dispatchers.IO) {
+                        val clienteNovo = clienteAPI.gravar(cliente).await()
+                        println("***************$clienteNovo")
+                        controleNavegacao?.navigate("conteudo")
+                    }
+                }else{
+                    println("*******dados invalidos*********")
                 }
             },
             modifier = Modifier.padding(16.dp).fillMaxWidth()
