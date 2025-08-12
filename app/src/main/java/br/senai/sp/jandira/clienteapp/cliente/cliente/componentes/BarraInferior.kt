@@ -4,19 +4,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 
 
 @Composable
-fun BarraInferior(modifier: Modifier = Modifier) {
+fun BarraInferior(controleNavegacao: NavHostController?) {
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -24,7 +22,7 @@ fun BarraInferior(modifier: Modifier = Modifier) {
     ) {
         NavigationBarItem(
             selected = false,
-            onClick = {},
+            onClick = {controleNavegacao!!.navigate("Lista")},
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
@@ -46,11 +44,13 @@ fun BarraInferior(modifier: Modifier = Modifier) {
         )
         NavigationBarItem(
             selected = false,
-            onClick = {},
+            onClick = {
+                controleNavegacao!!.navigate("cadastro")
+            },
             icon = {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Meu Novo",
+                    contentDescription = "Meu Novo Cliente",
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -61,5 +61,5 @@ fun BarraInferior(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun BarraInferiorPreview(){
-    BarraInferior()
+    BarraInferior(null)
 }
