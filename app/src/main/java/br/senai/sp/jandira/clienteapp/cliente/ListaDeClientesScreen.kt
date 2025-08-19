@@ -35,7 +35,7 @@ fun ListaDeClientes(){
             //garante a margem na parte de cima
             NavHost(navController = controleNavegacao,
                 startDestination = "Lista"){
-                composable(route="Lista"){Conteudo(padding)}
+                composable(route="Lista"){Conteudo(padding,controleNavegacao)}
                 composable(route="Cadastro"){ClienteForm(padding, controleNavegacao)}
             }
         }
